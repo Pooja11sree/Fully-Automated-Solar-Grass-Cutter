@@ -1,0 +1,72 @@
+## 💻 Code
+
+const int trigPin = 6;
+const int echoPin = 7;
+const int dc1=3;  
+const int dc2=2;
+const int dc3=4;
+const int dc4=5;
+
+const int RLY=8;
+long duration;
+int  distance;
+void setup()
+{
+  pinMode(dc1,OUTPUT);
+  pinMode(dc2,OUTPUT);
+  pinMode(dc3,OUTPUT);    
+  pinMode(dc4,OUTPUT);
+ 
+  pinMode(RLY,OUTPUT);  
+ 
+  pinMode(trigPin, OUTPUT); // Sets the trigPin as an Output
+  pinMode(echoPin, INPUT); // Sets the echoPin as an Input
+  Serial.begin(9600);
+  digitalWrite(dc1,LOW);
+  digitalWrite(dc2,LOW);
+  digitalWrite(dc3,LOW);  
+  digitalWrite(dc4,LOW);
+  digitalWrite(RLY,HIGH);  
+
+}
+void loop()
+{
+ultra();
+if(distance<=30)
+{
+    Serial.write("OBSTACLE DETECTED \n");  
+    digitalWrite(dc1,HIGH);  
+    digitalWrite(dc2,LOW);    
+    digitalWrite(dc3,LOW);  
+    digitalWrite(dc4,HIGH);
+    Serial.print("RIGHT\n");  
+    delay(2000);
+}
+else
+{
+    digitalWrite(dc1,HIGH);  
+    digitalWrite(dc2,LOW);    
+    digitalWrite(dc3,HIGH);  
+    digitalWrite(dc4,LOW);
+    Serial.print("FORWARD\n");    
+}  
+}
+
+
+void ultra()
+{
+digitalWrite(trigPin, LOW);
+delayMicroseconds(2);
+// Sets the trigPin on HIGH state for 10 micro seconds
+digitalWrite(trigPin, HIGH);
+delayMicroseconds(10);
+digitalWrite(trigPin, LOW);
+// Reads the echoPin, returns the sound wave travel time in microseconds
+duration = pulseIn(echoPin, HIGH);
+// Calculating the distance
+distance= duration*0.034/2;
+// Prints the distance on the Serial Monitor
+Serial.print("Distance: ");
+Serial.println(distance);  
+delay(100);
+}
